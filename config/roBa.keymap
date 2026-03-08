@@ -1,7 +1,9 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
-// #include <dt-bindings/zmk/pointing.h> // 一旦コメントアウト
+#include <dt-bindings/zmk/pointing.h>
+
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 80
 
 &mt {
     flavor = "balanced";
@@ -16,30 +18,31 @@
             compatible = "zmk,behavior-hold-tap";
             label = "LAYER_TAP_TO_0";
             bindings = <&mo>, <&to>;
+
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
 
-        // マウス系 behaviors を一旦コメントアウト
-        /*
         encoder_msc_down_up: encoder_msc_down_up {
             compatible = "zmk,behavior-sensor-rotate";
             label = "ENCODER_MSC_DOWN_UP";
             #sensor-binding-cells = <0>;
             bindings = <&msc SCRL_DOWN>, <&msc SCRL_UP>;
+
             tap-ms = <20>;
         };
-        */
 
         tog_on: toggle_layer_on_only {
             compatible = "zmk,behavior-toggle-layer";
             #binding-cells = <1>;
+            display-name = "Toggle Layer On";
             toggle-mode = "on";
         };
 
         tog_off: toggle_layer_off_only {
             compatible = "zmk,behavior-toggle-layer";
             #binding-cells = <1>;
+            display-name = "Toggle Layer Off";
             toggle-mode = "off";
         };
     };
@@ -55,21 +58,39 @@
         bt0_for_macOS: bt0_for_macOS {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off 1 &tog_off 2>, <&macro_wait_time 200>, <&tog_on 0>, <&macro_wait_time 500>, <&bt BT_SEL 0>;
+            bindings =
+                <&tog_off 1 &tog_off 2>,
+                <&macro_wait_time 200>,
+                <&tog_on 0>,
+                <&macro_wait_time 500>,
+                <&bt BT_SEL 0>;
+
             label = "BT0_FOR_MACOS";
         };
 
         bt1_for_iPadOS: bt1_for_iPadOS {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off 0 &tog_off 2>, <&macro_wait_time 200>, <&tog_on 1>, <&macro_wait_time 500>, <&bt BT_SEL 1>;
+            bindings =
+                <&tog_off 0 &tog_off 2>,
+                <&macro_wait_time 200>,
+                <&tog_on 1>,
+                <&macro_wait_time 500>,
+                <&bt BT_SEL 1>;
+
             label = "BT1_FOR_IPADOS";
         };
 
         bt2_for_Windows: bt2_for_windows {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&tog_off 0 &tog_off 1>, <&macro_wait_time 200>, <&tog_on 2>, <&macro_wait_time 500>, <&bt BT_SEL 2>;
+            bindings =
+                <&tog_off 0 &tog_off 1>,
+                <&macro_wait_time 200>,
+                <&tog_on 2>,
+                <&macro_wait_time 500>,
+                <&bt BT_SEL 2>;
+
             label = "BT2_FOR_WINDOWS";
         };
     };
@@ -79,35 +100,37 @@
 
         for_macOS {
             bindings = <
-&kp Q             &kp W         &kp E         &kp R      &kp T                                                                       &kp Y       &kp U  &kp I      &kp O    &kp P
+&kp Q             &kp W         &kp E         &kp R      &kp T                                                       &kp Y       &kp U  &kp I      &kp O    &kp P
 &kp A             &kp S         &kp D         &kp F      &kp G            &trans            &kp LEFT_PARENTHESIS     &kp H       &kp J  &kp K      &kp L    &lt 5 SEMI
 &mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B            &kp ESCAPE        &lt 4 RIGHT_PARENTHESIS  &kp N       &kp M  &kp COMMA  &kp DOT  &mt LSHIFT SLASH
-&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI  &lt 6 TAB  &lt 4 BACKSPACE  &lt 3 DELETE      &lt 7 SPACE              &kp RETURN                               &mt LGUI MINUS
+&kp LEFT_CONTROL  &kp LEFT_ALT  &kp LEFT_GUI  &lt 6 TAB  &lt 4 BACKSPACE  &lt 3 DELETE      &lt 7 SPACE              &kp RETURN                             &mt LGUI MINUS
             >;
-            // sensor-bindings = <&encoder_msc_down_up>; // 一旦無効
+
+            sensor-bindings = <&encoder_msc_down_up>;
+            sensor-bindings = <&encoder_msc_down_up>;
         };
 
         for_iPadOS {
             bindings = <
-&kp Q         &kp W     &kp E     &kp R      &kp T                                                                          &kp Y      &kp U  &kp I      &kp O    &kp P
+&kp Q         &kp W     &kp E     &kp R      &kp T                                                           &kp Y      &kp U  &kp I      &kp O    &kp P
 &kp A         &kp S     &kp D     &kp F      &kp G            &kp LOCKING_CAPS      &kp LEFT_PARENTHESIS     &kp H      &kp J  &kp K      &kp L    &lt 5 SEMI
 &mt LSHIFT Z  &kp X     &kp C     &kp V      &kp B            &kp ESC               &lt 4 RIGHT_PARENTHESIS  &kp N      &kp M  &kp COMMA  &kp DOT  &mt LSHIFT SLASH
-&kp LCTRL     &kp LALT  &kp LGUI  &lt 6 TAB  &lt 4 BACKSPACE  &lt 3 DELETE          &lt 7 SPACE              &kp ENTER                               &mt LGUI MINUS
+&kp LCTRL     &kp LALT  &kp LGUI  &lt 6 TAB  &lt 4 BACKSPACE  &lt 3 DELETE          &lt 7 SPACE              &kp ENTER                             &mt LGUI MINUS
             >;
         };
 
         for_Windows {
             bindings = <
-&kp Q             &kp W         &kp E         &kp R      &kp T                                                                       &kp Y       &kp U  &kp I      &kp O    &kp P
-&kp A             &kp S         &kp D         &kp F      &kp G            &trans            &kp LEFT_PARENTHESIS     &kp H       &kp J  &kp K      &kp L    &lt 5 SEMI
-&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B            &kp ESCAPE        &lt 4 RIGHT_PARENTHESIS  &kp N       &kp M  &kp COMMA  &kp DOT  &mt LSHIFT SLASH
-&kp LEFT_CONTROL  &kp LEFT_GUI  &kp LEFT_ALT  &lt 6 TAB  &lt 4 BACKSPACE  &lt 3 DELETE      &lt 7 SPACE              &kp ENTER                                &mt LEFT_CONTROL MINUS
+&kp Q             &kp W         &kp E         &kp R      &kp T                                                       &kp Y      &kp U  &kp I      &kp O    &kp P
+&kp A             &kp S         &kp D         &kp F      &kp G            &trans            &kp LEFT_PARENTHESIS     &kp H      &kp J  &kp K      &kp L    &lt 5 SEMI
+&mt LEFT_SHIFT Z  &kp X         &kp C         &kp V      &kp B            &kp ESCAPE        &lt 4 RIGHT_PARENTHESIS  &kp N      &kp M  &kp COMMA  &kp DOT  &mt LSHIFT SLASH
+&kp LEFT_CONTROL  &kp LEFT_GUI  &kp LEFT_ALT  &lt 6 TAB  &lt 4 BACKSPACE  &lt 3 DELETE      &lt 7 SPACE              &kp ENTER                             &mt LEFT_CONTROL MINUS
             >;
         };
 
         Function_Symbol {
             bindings = <
-&kp EXCL  &kp AT  &kp HASH  &kp DOLLAR  &kp PERCENT                                 &kp CARET   &kp AMPS  &kp ASTRK    &kp SINGLE_QUOTE  &kp DOUBLE_QUOTES
+&kp EXCL  &kp AT  &kp HASH  &kp DOLLAR  &kp PERCENT                         &kp CARET   &kp AMPS  &kp ASTRK    &kp SINGLE_QUOTE  &kp DOUBLE_QUOTES
 &trans    &trans  &trans    &trans      &trans       &trans      &trans     &trans      &trans    &trans       &trans            &trans
 &kp F1    &kp F2  &kp F3    &kp LA(F4)  &kp F5       &kp F6      &kp F7     &kp F8      &kp F9    &kp RS(F10)  &kp F11           &kp F12
 &trans    &trans  &trans    &trans      &trans       &trans      &kp SPACE  &kp RETURN                                           &trans
@@ -116,37 +139,37 @@
 
         Numbers {
             bindings = <
-&kp PLUS   &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &trans                                         &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &trans
-&kp MINUS  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &trans   &trans         &trans     &trans      &trans           &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &trans
+&kp PLUS   &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &trans                             &trans           &kp KP_NUMBER_7  &kp KP_NUMBER_8  &kp KP_NUMBER_9  &trans
+&kp MINUS  &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &trans   &trans         &trans     &trans           &kp KP_NUMBER_4  &kp KP_NUMBER_5  &kp KP_NUMBER_6  &trans
 &kp ASTRK  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp DOT  &kp EQUAL      &kp EQUAL  &kp KP_NUMBER_0  &kp KP_NUMBER_1  &kp KP_NUMBER_2  &kp KP_NUMBER_3  &kp DOT
-&kp SLASH  &kp KP_NUMBER_0  &trans           &trans           &trans   &trans         &trans     &trans                                                                          &trans
+&kp SLASH  &kp KP_NUMBER_0  &trans           &trans           &trans   &trans         &trans     &trans                                                              &trans
             >;
         };
 
         Mouse {
             bindings = <
-&trans  &trans  &trans  &trans  &trans                                    &trans    &trans    &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans    &trans    &trans    &trans          &trans  &trans
-&trans  &trans  &trans  &trans  &trans  &trans      &trans    &trans    &trans    &trans          &trans  &trans
+&trans  &trans  &trans  &trans  &trans                        &trans    &trans    &msc SCRL_DOWN  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &trans    &trans    &mkp MB1  &mkp MB2        &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans      &mkp MB4  &mkp MB5  &trans    &msc SCRL_UP    &trans  &trans
 &trans  &trans  &trans  &trans  &trans  &trans      &trans    &trans                                      &trans
             >;
         };
 
         Arrows {
             bindings = <
-&trans  &trans          &kp UP_ARROW    &trans          &trans                                           &trans   &trans    &kp UP_ARROW    &trans      &trans
-&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &trans  &trans      &trans                &trans   &kp LEFT  &kp DOWN_ARROW  &kp RIGHT   &trans
-&trans  &trans          &trans          &trans          &trans  &trans      &trans                &trans   &trans    &trans          &trans      &trans
-&trans  &trans          &trans          &trans          &trans  &trans      &kp LA(LEFT_CONTROL)  &kp RET                                          &kp RIGHT_ALT
+&trans  &trans          &kp UP_ARROW    &trans           &trans                                    &trans   &trans    &kp UP_ARROW    &trans     &trans
+&trans  &kp LEFT_ARROW  &kp DOWN_ARROW  &kp RIGHT_ARROW  &trans  &trans      &trans                &trans   &kp LEFT  &kp DOWN_ARROW  &kp RIGHT  &trans
+&trans  &trans          &trans          &trans           &trans  &trans      &trans                &trans   &trans    &trans          &trans     &trans
+&trans  &trans          &trans          &trans           &trans  &trans      &kp LA(LEFT_CONTROL)  &kp RET                                       &kp RIGHT_ALT
             >;
         };
 
         BT-Setting {
             bindings = <
-&trans  &trans  &trans  &trans            &trans                                                                 &bt0_for_macOS  &bt1_for_iPadOS  &bt2_for_Windows  &bt BT_SEL 3  &bt BT_SEL 4
-&trans  &trans  &trans  &trans            &trans           &trans                 &trans        &trans           &trans          &trans           &trans            &trans        &trans
-&trans  &trans  &trans  &trans            &trans           &trans                 &bootloader   &trans           &trans          &trans           &trans            &trans        &bt BT_CLR
-&trans  &trans  &trans  &kp LOCKING_CAPS  &kp LOCKING_NUM  &kp LA(LG(LC(P)))      &trans        &trans                                                                            &bt BT_CLR_ALL
+&trans  &trans  &trans  &trans            &trans                                               &bt0_for_macOS  &bt1_for_iPadOS  &bt2_for_Windows  &bt BT_SEL 3  &bt BT_SEL 4
+&trans  &trans  &trans  &trans            &trans           &trans                 &trans       &trans          &trans           &trans            &trans        &trans
+&trans  &trans  &trans  &trans            &trans           &trans                 &bootloader  &trans          &trans           &trans            &trans        &bt BT_CLR
+&trans  &trans  &trans  &kp LOCKING_CAPS  &kp LOCKING_NUM  &kp LA(LG(LC(P)))      &trans       &trans                                                           &bt BT_CLR_ALL
             >;
         };
     };
